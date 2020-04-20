@@ -12,8 +12,14 @@
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "resizeMode": "cover"
+    },
+    "androidStatusBar": {
+      "hidden": false, 
+      "translucent": true, 
+      "barStyle": "light-content", 
+      "backgroundColor": "#00000000",
+      "animated" : true
     },
     "updates": {
       "fallbackToCacheTimeout": 0

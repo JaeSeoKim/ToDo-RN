@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Main from "./src/Main";
 import { AppLoading } from "expo";
 import { View, AsyncStorage } from "react-native";
+import * as Font from "expo-font";
 
 export default function App() {
   const [isLoding, setIsloading] = useState(true);
@@ -9,7 +10,9 @@ export default function App() {
 
   const _loadToDos = async () => {
     try {
-      AsyncStorage.removeItem("toDos");
+      await Font.loadAsync({
+        NanumSquareR: require("./assets/fonts/NanumSquareR.otf"),
+      });
       const toDos = await AsyncStorage.getItem("toDos");
       const parsedToDos = JSON.parse(toDos);
       setToDos(parsedToDos || {});

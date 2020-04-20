@@ -164,12 +164,14 @@ const Styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   input: {
+    fontFamily: "NanumSquareR",
     color: "#6f6f6f",
     fontSize: 25,
     padding: 10,
     width: (width / 4) * 3,
   },
   text: {
+    fontFamily: "NanumSquareR",
     fontSize: 25,
     padding: 10,
     width: width / 2,
