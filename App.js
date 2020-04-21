@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Main from "./src/Main";
 import { AppLoading } from "expo";
-import { View, AsyncStorage } from "react-native";
+import { View, AsyncStorage, Alert } from "react-native";
 import * as Font from "expo-font";
 
 export default function App() {
@@ -11,14 +11,15 @@ export default function App() {
   const _loadToDos = async () => {
     try {
       await Font.loadAsync({
-        NanumSquareR: require("./assets/fonts/NanumSquareR.otf"),
+        NanumBarunGothic: require("./assets/fonts/NanumBarunGothic.otf"),
       });
       const toDos = await AsyncStorage.getItem("toDos");
       const parsedToDos = JSON.parse(toDos);
-      setToDos(parsedToDos || {});
+      setToDos(parsedToDos || []);
       setIsloading(false);
     } catch (error) {
       console.log(error);
+      Alert.alert("ERRORRRR....", `${error}`);
     }
   };
 

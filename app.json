@@ -1,11 +1,10 @@
 {
   "expo": {
     "name": "ToDo",
-    "slug": "ToDo",
+    "slug": "Simple_ToDo_App",
     "platforms": [
       "ios",
-      "android",
-      "web"
+      "android"
     ],
     "version": "1.0.0",
     "orientation": "portrait",
@@ -28,7 +27,13 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "com.devjs.todo",
+      "buildNumber": "1.0.0",
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.devjs.todo",
+      "versionCode": 1
     }
   }
 }

@@ -53,18 +53,15 @@ export default class Main extends React.Component {
               onBlur={this._onEndEditToDo}
             />
             <ScrollView contentContainerStyle={styles.toDos}>
-              {Object.values(toDos)
-                .reverse()
-                .map((toDo) => (
-                  <ToDo
-                    key={toDo.id}
-                    deleteToDo={this._deleteToDo}
-                    uncompleteToDo={this._unCompleteToDo}
-                    completeToDo={this._completeToDo}
-                    updateToDo={this._updateToDo}
-                    {...toDo}
-                  />
-                ))}
+              {Array(...toDos).reverse().map((toDo) => (
+                <ToDo
+                  key={toDo.id}
+                  deleteToDo={this._deleteToDo}
+                  toggleCompleteToDo={this._toggleCompleteToDo}
+                  updateToDo={this._updateToDo}
+                  {...toDo}
+                />
+              ))}
             </ScrollView>
           </View>
         </LinearGradient>
@@ -84,19 +81,14 @@ export default class Main extends React.Component {
     if (this.state.newToDo !== "") {
       const ID = uuid();
       const todo = {
-        [ID]: {
-          id: ID,
-          value: this.state.newToDo,
-          createdAt: new Date(),
-          isCompleted: false,
-        },
+        id: ID,
+        value: this.state.newToDo,
+        createdAt: new Date(),
+        isCompleted: false,
       };
       this.setState((prevState) => {
         const newState = {
-          toDos: {
-            ...prevState.toDos,
-            ...todo,
-          },
+          toDos: prevState.toDos.concat(todo),
           newToDo: "",
         };
         this._saveToDos(newState.toDos);
@@ -108,44 +100,29 @@ export default class Main extends React.Component {
   _deleteToDo = (id) => {
     this.setState((prevState) => {
       const toDos = prevState.toDos;
-      delete toDos[id];
+      const index = toDos.findIndex((i) => i.id === id);
+      toDos.splice(index, 1);
       const newState = {
         ...prevState,
-        ...toDos,
+        toDos,
       };
       this._saveToDos(newState.toDos);
       return { ...newState };
     });
   };
 
-  _completeToDo = (id) => {
+  _toggleCompleteToDo = (id) => {
     this.setState((prevState) => {
-      const newState = {
-        ...prevState,
-        toDos: {
-          ...prevState.toDos,
-          [id]: {
-            ...prevState.toDos[id],
-            isCompleted: true,
-          },
-        },
+      const toDos = prevState.toDos;
+      const index = toDos.findIndex((i) => i.id === id);
+      const newToDo = {
+        ...prevState.toDos[index],
+        isCompleted: !prevState.toDos[index].isCompleted,
       };
-      this._saveToDos(newState.toDos);
-      return { ...newState };
-    });
-  };
-
-  _unCompleteToDo = (id) => {
-    this.setState((prevState) => {
+      toDos.splice(index, 1, newToDo);
       const newState = {
         ...prevState,
-        toDos: {
-          ...prevState.toDos,
-          [id]: {
-            ...prevState.toDos[id],
-            isCompleted: false,
-          },
-        },
+        toDos: toDos,
       };
       this._saveToDos(newState.toDos);
       return { ...newState };
@@ -154,15 +131,16 @@ export default class Main extends React.Component {
 
   _updateToDo = (id, value) => {
     this.setState((prevState) => {
+      const toDos = prevState.toDos;
+      const index = toDos.findIndex((i) => i.id === id);
+      const newToDo = {
+        ...prevState.toDos[index],
+        value: value,
+      };
+      toDos.splice(index, 1, newToDo);
       const newState = {
         ...prevState,
-        toDos: {
-          ...prevState.toDos,
-          [id]: {
-            ...prevState.toDos[id],
-            value: value,
-          },
-        },
+        toDos: toDos,
       };
       this._saveToDos(newState.toDos);
       return { ...newState };
@@ -182,13 +160,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   title: {
-    fontFamily: "NanumSquareR",
+    fontFamily: "NanumBarunGothic",
     alignSelf: "baseline",
     marginTop: 30,
     marginBottom: 10,
     marginLeft: 20,
     fontSize: 50,
     color: "white",
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowColor: "rgba(0, 0, 0, 0.2)",
+    textShadowRadius: 5,
   },
   box: {
     flex: 1,
@@ -199,7 +180,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     ...Platform.select({
       ios: {
-        shadowColor: "rgb(50, 50, 50)",
+        shadowColor: "rgba(0, 0, 0, 0.2)",
         shadowOpacity: 0.5,
         shadowRadius: 5,
         shadowOffset: {
@@ -213,7 +194,7 @@ const styles = StyleSheet.create({
     }),
   },
   input: {
-    fontFamily: "NanumSquareR",
+    fontFamily: 'NanumBarunGothic',
     color: "#6f6f6f",
     fontSize: 30,
     width: width - 30,

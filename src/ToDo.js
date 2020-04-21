@@ -26,8 +26,7 @@ export default class ToDo extends React.Component {
     isCompleted: propTypes.bool.isRequired,
     id: propTypes.string.isRequired,
     deleteToDo: propTypes.func.isRequired,
-    completeToDo: propTypes.func.isRequired,
-    uncompleteToDo: propTypes.func.isRequired,
+    toggleCompleteToDo: propTypes.func.isRequired,
     isCompleted: propTypes.bool.isRequired,
     updateToDo: propTypes.func.isRequired,
   };
@@ -38,7 +37,7 @@ export default class ToDo extends React.Component {
       isCompleted,
       id,
       deleteToDo,
-      completeToDo,
+      toggleCompleteToDo,
       uncompleteToDo,
     } = this.props;
     return (
@@ -63,35 +62,27 @@ export default class ToDo extends React.Component {
         ) : (
           <View style={Styles.container}>
             <View style={Styles.betweenContainer}>
-              {isCompleted ? (
-                <TouchableOpacity
-                  onPress={(event) => {
-                    event.stopPropagation();
-                    uncompleteToDo(id);
-                  }}
-                  style={Styles.action}
-                >
+              <TouchableOpacity
+                onPress={(event) => {
+                  event.stopPropagation();
+                  toggleCompleteToDo(id);
+                }}
+                style={Styles.action}
+              >
+                {isCompleted ? (
                   <Ionicons
                     name="md-checkmark-circle"
                     color="#E684AE"
                     size={35}
                   />
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity
-                  onPress={(event) => {
-                    event.stopPropagation();
-                    completeToDo(id);
-                  }}
-                  style={Styles.action}
-                >
+                ) : (
                   <Ionicons
                     name="md-checkmark-circle-outline"
                     color="#A770EF"
                     size={35}
                   />
-                </TouchableOpacity>
-              )}
+                )}
+              </TouchableOpacity>
               <Text
                 style={[
                   Styles.text,
@@ -164,14 +155,14 @@ const Styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   input: {
-    fontFamily: "NanumSquareR",
+    fontFamily: 'NanumBarunGothic',
     color: "#6f6f6f",
     fontSize: 25,
     padding: 10,
     width: (width / 4) * 3,
   },
   text: {
-    fontFamily: "NanumSquareR",
+    fontFamily: 'NanumBarunGothic',
     fontSize: 25,
     padding: 10,
     width: width / 2,
